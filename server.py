@@ -3,6 +3,7 @@ from uglier import execute_block, variables, functions, classes
 import sys
 import io
 import traceback
+import os
 
 app = Flask(__name__, static_folder='.')
 
@@ -60,7 +61,23 @@ def get_state():
         "classes": list(classes.keys())
     })
 
+@app.route("/health")
+def health():
+    """Health check endpoint"""
+    return jsonify({"status": "healthy"})
+
 if __name__ == "__main__":
-    print("Starting Uglier web server...")
-    print("Open http://localhost:5000 in your browser")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # Get port from environment variable (Railway sets this)
+    port = int(os.environ.get("PORT", 5000))
+    
+    print(f"Starting Uglier web server on port {port}...")
+    print(f"Server will be available at http://0.0.0.0:{port}")
+    
+    # Run with proper configuration for production
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False,  # Disable debug mode in production
+        threaded=True  # Enable threading for better performance
+    )
+
