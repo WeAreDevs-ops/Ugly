@@ -7,8 +7,13 @@ import sys, math, os, builtins
 variables = {}
 functions = {}
 classes = {}
+in_block = False
+current_function = None
+current_class = None
 
+# -------------------------
 # Helper to evaluate expressions
+# -------------------------
 def eval_expr(expr):
     expr = expr.strip()
     if expr.startswith('"') and expr.endswith('"'):
@@ -26,6 +31,8 @@ def eval_expr(expr):
 # Core execution
 # -------------------------
 def execute_line(line):
+    global in_block, current_function, current_class  # <--- FIXED: globals first
+
     line = line.strip()
     if not line:
         return
@@ -67,9 +74,7 @@ def execute_line(line):
             raise Exception("Invalid def syntax")
         name, args = name_args[0].strip(), name_args[1].rstrip("):").strip()
         functions[name] = {"args": [a.strip() for a in args.split(",") if a], "body": []}
-        global current_function
         current_function = name
-        global in_block
         in_block = True
         return
 
@@ -79,16 +84,13 @@ def execute_line(line):
     if line.startswith("class "):
         class_name = line[6:].split(":")[0].strip()
         classes[class_name] = {"body": []}
-        global current_class
         current_class = class_name
-        global in_block
         in_block = True
         return
 
     # -------------------------
-    # Control flow (if/else/while/for)
+    # Control flow (if/else/while)
     # -------------------------
-    # Note: basic example, can expand
     if line.startswith("if ") or line.startswith("elif ") or line.startswith("else:") or line.startswith("while "):
         try:
             exec(line, {"__builtins__": None}, variables)
@@ -100,12 +102,10 @@ def execute_line(line):
     # Function call
     # -------------------------
     if "(" in line and line.endswith(")"):
-        # naive call
         func_name = line.split("(")[0].strip()
         if func_name in functions:
-            print(f"Calling user function: {func_name}")
+            print(f"Calling user function: {func_name} (placeholder)")
         else:
-            # try built-in
             try:
                 eval(line, {"__builtins__": None}, variables)
             except Exception as e:
@@ -127,3 +127,20 @@ def execute_block(lines):
     current_class = None
     for line in lines:
         execute_line(line)
+
+# -------------------------
+# Main REPL for testing
+# -------------------------
+if __name__ == "__main__":
+    print("Welcome to Uglier Phase 9 (Full Python Replacement)")
+    try:
+        while True:
+            try:
+                inp = input("uglier> ").strip()
+                if inp.lower() in ("exit", "quit"):
+                    break
+                execute_block([inp])
+            except Exception as e:
+                print(f"Error: {e}")
+    except EOFError:
+        print("\nExiting Uglier.")
