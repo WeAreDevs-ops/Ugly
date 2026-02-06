@@ -1,0 +1,13 @@
+# Roblox user info
+let user_info = roblox_get_user("Roblox")
+print user_info
+
+# Roblox game info
+let game_info = roblox_get_game(1818) # Example game ID
+print game_info
+
+# Loops & functions
+def greet_users:
+    for i in 1 3:
+        print "Hello user " + i
+call greet_users
