@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Uglier Live Coding</title>
+</head>
+<body>
+<h1>Uglier Phase 9 Live Coding</h1>
+<textarea id="code" rows="10" cols="60">
+let x = 10
+let y = 20
+print x + y
+</textarea><br>
+<button onclick="runCode()">Run</button>
+
+<h3>Output:</h3>
+<pre id="output"></pre>
+
+<script>
+async function runCode() {
+    const code = document.getElementById("code").value;
+    const res = await fetch("/run", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({code})
+    });
+    const data = await res.json();
+    document.getElementById("output").innerText = data.output;
+}
+</script>
+</body>
+</html>
