@@ -1,13 +1,26 @@
-# Roblox user info
-let user_info = roblox_get_user("Roblox")
-print user_info
+# Arrays and loops
+let numbers = [1,2,3,4,5]
+let total = 0
 
-# Roblox game info
-let game_info = roblox_get_game(1818) # Example game ID
-print game_info
+for i 0 4:
+    total = total + numbers[i]
 
-# Loops & functions
-def greet_users:
-    for i in 1 3:
-        print "Hello user " + i
-call greet_users
+print "Sum is " + total
+
+# If/else
+if total > 10:
+    print "Big sum"
+else:
+    print "Small sum"
+
+# Function
+def greet name:
+    print "Hello " + name
+
+call greet "Alice"
+
+# While loop
+let x = 0
+while x < 3:
+    print x
+    x = x + 1
