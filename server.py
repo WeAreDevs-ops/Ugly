@@ -9,7 +9,7 @@ def run_code():
     code = request.json.get("code", "")
     output = []
 
-    # Redirect print to capture output
+    # capture print
     class Capturer:
         def write(self, txt): output.append(txt)
         def flush(self): pass
